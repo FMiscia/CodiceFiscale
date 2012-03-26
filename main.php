@@ -19,7 +19,6 @@ try {
 }
 while (($buffer = fgets($handle)) !== false) {
     $buffer = rtrim($buffer);
-    $buffer = str_replace(" ", "", $buffer);
     list($surname,$name,$date,$location,$sex) = explode(";", $buffer);
     $mySocialNumber = new SocialNumber($surname,$name,$date,$location,$sex);
     print(strtoupper($mySocialNumber->letsGo($argv[2])) . "\n");
