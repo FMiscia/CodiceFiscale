@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+$DS = DIRECTORY_SEPARATOR;
+
+chdir(dirname(__FILE__));
+
+set_include_path(
+        getcwd().$DS.'lib'.PATH_SEPARATOR
+        . get_include_path()
+);
+
+# Let's start.
+
+require_once 'pj/coders/Aggregator.php';
+require_once 'pj/readers/CodesCsvReader.php';
+require_once 'pj/readers/TownsCsvReader.php';
+
+use \pj\coders\Aggregator;
+use \pj\readers\CodesCsvReader;
+use \pj\readers\TownsCsvReader;
+
+$codes = new CodesCsvReader('.'.$DS.'codici.csv');
+$towns = new TownsCsvReader('.'.$DS.'comuni.csv');
+
+$codes->each(function($lastname, $firstname, $birthday, $town, $gender) use ($towns) {
+        try {
+                $code = new Aggregator($towns, $lastname, $firstname, $birthday, $town, $gender);
+                echo strtoupper($code->getCode()) . "\n";
+        } catch (\Exception $e) {
+                echo $e->getMessage();
+        }
+});
